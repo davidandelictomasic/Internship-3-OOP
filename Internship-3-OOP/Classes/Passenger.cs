@@ -29,6 +29,7 @@
             if (!ReservedFlightIds.Contains(flightId))
             {
                 ReservedFlightIds.Add(flightId);
+                UpdateTimestamp();
                 return true;
             }
             return false;
@@ -36,6 +37,7 @@
         public void RemoveReservedFlight(Guid flightId)
         {
             ReservedFlightIds.Remove(flightId);
+            UpdateTimestamp();
         }
     }
 }

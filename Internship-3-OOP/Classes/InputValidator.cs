@@ -203,5 +203,38 @@ namespace Internship_3_OOP.Classes
                 return false;
             }
         }
+        public static DateTime ReadArrivalTime(DateTime departureTime,string prompt)
+        {
+            while (true)
+            {
+                
+                DateTime arrival = ReadDateTime(prompt);
+
+                if (arrival <= departureTime)
+                {
+                    Console.WriteLine("Vrijeme dolaska mora biti POSLIJE vremena polaska! Pokušajte ponovo.");
+                    continue;
+                }
+
+                return arrival;
+            }
+        }
+        public static DateTime ReadDepartureTime(DateTime arrivalTime, string prompt)
+        {
+            while (true)
+            {
+
+                DateTime departure = ReadDateTime(prompt);
+
+                if (arrivalTime <= departure)
+                {
+                    Console.WriteLine("Vrijeme polaska mora biti PRIJE vremena polaska! Pokušajte ponovo.");
+                    continue;
+                }
+
+                return departure;
+            }
+        }
+
     }
 }
