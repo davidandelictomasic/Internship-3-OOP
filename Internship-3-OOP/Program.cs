@@ -1,10 +1,15 @@
-﻿namespace Internship_3_OOP
+﻿using Internship_3_OOP.Classes;
+
+namespace Internship_3_OOP
 {
     internal class Program
     {
+        private static List<Passenger> AllPassengers = new();
         static void Main(string[] args)
         {
+            
             ShowStartingMenu();
+            
         }
 
         static void ShowStartingMenu() {
@@ -61,10 +66,11 @@
                     switch (userChoice)
                     {
                         case 1:
-                            
+
+                            RegisterPassenger();
                             break;
                         case 2:
-
+                            LoginPassenger();
                             break;
                         case 3:
 
@@ -84,6 +90,39 @@
                 }
             }
         }
-        
+        static void RegisterPassenger()
+        {
+            Console.Clear();
+            Console.WriteLine("REGISTRACIJA PUTNIKA\n");
+
+            string firstName = InputValidator.ReadString("Unesite ime: ");
+            string lastName = InputValidator.ReadString("Unesite prezime: ");
+            int yearOfBirth = InputValidator.ReadYear("Unesite godinu rođenja: ");
+            string email = InputValidator.ReadEmail("Unesite email: ");
+            string password = InputValidator.ReadPassword("Unesite zaporku: ");
+
+            var person = new Passenger(firstName, lastName, yearOfBirth, email, password);
+            AllPassengers.Add(person);
+        }
+        static void LoginPassenger() {
+            Console.Clear();
+            Console.WriteLine("PRIJAVA PUTNIKA\n");
+            string email = InputValidator.ReadEmail("Unesite email: ");
+            string password = InputValidator.ReadPassword("Unesite zaporku: ");
+            int passengerIndex = AllPassengers.FindIndex(p => p.Email == email );
+            
+            if(passengerIndex != -1 && AllPassengers[passengerIndex].VerifyPassword(password) )
+            {
+                Console.WriteLine("Uspješna prijava!");
+                Console.ReadLine();
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Neuspješna prijava, pokušajte ponovo.");
+                Console.ReadLine();
+                return;
+            }
+        }
     }
 }
