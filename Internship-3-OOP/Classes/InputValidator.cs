@@ -115,5 +115,93 @@ namespace Internship_3_OOP.Classes
                 return input;
             }
         }
+        public static DateTime ReadDateTime(string prompt)
+        {
+            DateTime result;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine()?.Trim();
+
+                
+                if (!DateTime.TryParse(input, out result))
+                {
+                    Console.WriteLine("Neispravan format datuma/vremena. Pokušajte ponovo (npr. 19.11.2025 14:30).");
+                    continue;
+                }
+
+                if (result < DateTime.Now)
+                {
+                    Console.WriteLine("Datum i vrijeme ne mogu biti u prošlosti. Pokušajte ponovo.");
+                    continue;
+                }
+
+                return result;
+            }
+        }
+        public static int ReadInt(string prompt)
+        {
+            int result;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine()?.Trim();
+
+                if (!int.TryParse(input, out result))
+                {
+                    Console.WriteLine("Neispravan unos. Unesite cijeli broj.");
+                    continue;
+                }
+
+                if (result < 0)
+                {
+                    Console.WriteLine("Broj ne smije biti manji od 0. Pokušajte ponovo.");
+                    continue;
+                }                
+
+                return result;
+            }
+        }
+        public static double ReadDouble(string prompt)
+        {
+            double result;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine()?.Trim();
+
+                if (!double.TryParse(input, out result))
+                {
+                    Console.WriteLine("Neispravan unos. Unesite decimalni broj.");
+                    continue;
+                }
+
+                if (result < 0)
+                {
+                    Console.WriteLine($"Vrijednost ne smije biti manja od 0. Pokušajte ponovo.");
+                    continue;
+                }               
+
+                return result;
+            }
+        }
+        public static bool ConfirmAction(string message)
+        {
+            Console.WriteLine($"{message} (Pritisnite ENTER za potvrdu ili bilo koju drugu tipku za prekid.)");
+
+            var key = Console.ReadKey().Key;
+            
+
+            if (key == ConsoleKey.Enter)
+            {
+                
+                return true;
+            }
+            else
+            {
+                
+                return false;
+            }
+        }
     }
 }
