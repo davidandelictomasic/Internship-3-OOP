@@ -1,4 +1,5 @@
-﻿using Internship_3_OOP.Classes;
+﻿using System;
+using Internship_3_OOP.Classes;
 
 namespace Internship_3_OOP
 {
@@ -12,17 +13,28 @@ namespace Internship_3_OOP
                 firstName: "Ana",
                 lastName: "Horvat",
                 yearOfBirth: 1995,
-                email: "ana.horvat@example.com",
+                email: "a@example.com",
                 password: "Password1"
-            );            
+            );
             AllPassengers.Add(Passenger1);
-           
+            var defaultFlight = new Flight(
+                origin: "ZAG",
+                destination: "LHR",
+                departureTime: DateTime.Today.AddHours(14),  
+                arrivalTime: DateTime.Today.AddHours(16),     
+                capacity: 180,                                       
+                distance: 1500.0
+            );
+            AllFlights.Add(defaultFlight);
+
             ShowStartingMenu();
-            
+
         }
 
-        static void ShowStartingMenu() {
-            while (true) {
+        static void ShowStartingMenu()
+        {
+            while (true)
+            {
                 Console.Clear();
                 Console.WriteLine("GLAVNI IZBORNIK\n1 - Putnici\n2 - Letovi\n3 - Avioni\n4 - Posada\n5 - Izlazak iz programa");
                 Console.Write("Odabir: ");
@@ -38,7 +50,7 @@ namespace Internship_3_OOP
                             ShowFlightMenu();
                             break;
                         case 3:
-                            
+
                             break;
                         case 4:
 
@@ -60,10 +72,11 @@ namespace Internship_3_OOP
                 }
 
             }
-        
-        
+
+
         }
-        static void ShowPassengerMenu() {
+        static void ShowPassengerMenu()
+        {
             while (true)
             {
 
@@ -99,11 +112,12 @@ namespace Internship_3_OOP
                 }
             }
         }
-        static void ShowPassengerFlightsMenu() {
+        static void ShowPassengerFlightsMenu(Passenger currentPassenger)
+        {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("LETOVI PUTNIKA\n1 - Prikaz svih letova\n2 - ODabir leta\n3 - Pretraživanje letova\n4 - Otkazivanje leta\n5 - Povratak na prethodni izbornik");
+                Console.WriteLine("LETOVI PUTNIKA\n1 - Prikaz svih letova\n2 - Odabir leta\n3 - Pretraživanje letova\n4 - Otkazivanje leta\n5 - Povratak na prethodni izbornik");
                 Console.Write("Odabir: ");
 
                 if (int.TryParse(Console.ReadLine(), out int userChoice))
@@ -111,16 +125,16 @@ namespace Internship_3_OOP
                     switch (userChoice)
                     {
                         case 1:
-                           
+                            PrintPassengerFlights(currentPassenger);
                             break;
                         case 2:
-
+                            AddPassengerFlight(currentPassenger);
                             break;
                         case 3:
-
+                            SearchPassengerFlight(currentPassenger);
                             break;
                         case 4:
-
+                            CancelPassengerFlight(currentPassenger);
                             break;
                         case 5:
                             return;
@@ -143,7 +157,8 @@ namespace Internship_3_OOP
         }
         static void ShowFlightMenu()
         {
-            while (true) {
+            while (true)
+            {
                 Console.Clear();
                 Console.WriteLine("IZBORNIK LETOVA\n1 - Prikaz svih letova\n2 - Dodavanje leta\n3 - Pretraživanje letova\n4 - Uređivanje leta\n5 - Brisanje leta\n6 - Povratak na prethodni izbornik");
                 Console.Write("Odabir: ");
@@ -193,22 +208,23 @@ namespace Internship_3_OOP
             string email = InputValidator.ReadEmail("Unesite email: ");
             string password = InputValidator.ReadPassword("Unesite zaporku: ");
 
-            var person = new Passenger(firstName, lastName, yearOfBirth, email, password);           
+            var person = new Passenger(firstName, lastName, yearOfBirth, email, password);
             AllPassengers.Add(person);
         }
-        static void LoginPassenger() {
+        static void LoginPassenger()
+        {
             Console.Clear();
             Console.WriteLine("PRIJAVA PUTNIKA\n");
             string email = InputValidator.ReadEmail("Unesite email: ");
             string password = InputValidator.ReadPassword("Unesite zaporku: ");
-            int passengerIndex = AllPassengers.FindIndex(p => p.Email == email );
-            
-            if(passengerIndex != -1 && AllPassengers[passengerIndex].VerifyPassword(password) )
+            int passengerIndex = AllPassengers.FindIndex(p => p.Email == email);
+
+            if (passengerIndex != -1 && AllPassengers[passengerIndex].VerifyPassword(password))
             {
                 var currentPassenger = AllPassengers[passengerIndex];
                 Console.WriteLine("Uspješna prijava!");
                 Console.ReadLine();
-                ShowPassengerFlightsMenu();
+                ShowPassengerFlightsMenu(currentPassenger);
             }
             else
             {
@@ -217,15 +233,216 @@ namespace Internship_3_OOP
                 return;
             }
         }
+        static void PrintPassengerFlights(Passenger currentPassenger)
+        {
+            Console.Clear();
+            Console.WriteLine("PRIKAZ SVIH LETOVA PUTNIKA\n");
+            if (currentPassenger.GetReservedFlightIds().Count == 0)
+            {
+                Console.WriteLine("Nemate rezerviranih letova.");
+                Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                Console.ReadKey();
+                return;
+            }
+            foreach (var flightId in currentPassenger.GetReservedFlightIds())
+            {
+                var flight = AllFlights.Find(flight => flight.Id == flightId);
+                if (flight != null)
+                {
+                    Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)} - Naziv:{flight.FlightName} - Polazak:{flight.DepartureTime} - Dolazak:{flight.ArrivalTime} - Udaljenost:{flight.Distance}km - Trajanje:{flight.FlightDuration}min");
+                }
+            }
+            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+            Console.ReadKey();
+            return;
+        }
+        static void AddPassengerFlight(Passenger currentPassenger)
+        {
+            Console.Clear();
+            Console.WriteLine("PRIKAZ SVIH LETOVA PUTNIKA\nLetovi:");
+            foreach (var flight in AllFlights)
+                Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)} - Naziv:{flight.FlightName} - Polazak:{flight.DepartureTime} - Dolazak:{flight.ArrivalTime} - Udaljenost:{flight.Distance}km - Trajanje:{flight.FlightDuration}min");
+
+            Console.WriteLine("Unesite ID leta koji želite rezervirati (prvih 8 znakova):");
+            string shortId = Console.ReadLine().Trim() ?? string.Empty;
+            var foundFlight = AllFlights.Find(flight => flight.Id.ToString().StartsWith(shortId));
+            if (foundFlight != null)
+            {
+                Console.WriteLine("Let pronađen");
+                if (foundFlight.IsFull())
+                {
+                    Console.WriteLine("Let je pun, nije moguće rezervirati.");
+                    Console.ReadKey();
+                    return;
+                }
+                if (!InputValidator.ConfirmAction("Jeste li sigurni da želite rezervirati let?"))
+                {
+                    Console.WriteLine("Rezervacija leta je otkazana.");
+                    Console.ReadKey();
+                    return;
+                }
+                if (!foundFlight.AddPassenger(currentPassenger.Id))
+                {
+                    Console.WriteLine("Greška pri rezervaciji leta.");
+                    Console.ReadKey();
+                    return;
+                }
+                else
+                {
+                    if (currentPassenger.AddReservedFlight(foundFlight.Id))
+                    {
+
+                        Console.WriteLine("Let uspješno rezerviran.");
+                        Console.ReadKey();
+                        return;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Greška pri rezervaciji leta.");
+                        Console.ReadKey();
+                        return;
+                    }
+                }
+            }
+            else
+                Console.WriteLine("Let nije pronađen.");
+            Console.ReadKey();
+            return;
+        }
+        static void SearchPassengerFlight(Passenger currentPassenger)
+        {
+
+            Console.Clear();
+            Console.WriteLine("PRETRAŽIVANJE LETA\nOdaberite načina pretraživanja\n1 - ID\n2 - Naziv");
+
+            if (int.TryParse(Console.ReadLine(), out int userChoice))
+            {
+                switch (userChoice)
+                {
+                    case 1:
+                        Console.Clear();
+                        Console.WriteLine("PRETRAGA LETA PO ID-U\nRezervirani letovi:");
+                        foreach (var flightId in currentPassenger.GetReservedFlightIds())
+                        {
+                            var flight = AllFlights.Find(flight => flight.Id == flightId);
+                            if (flight != null)
+                            {
+                                Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)}");
+                            }
+                        }
+                        var foundFlight = FindFlightById(currentPassenger);
+                        if (foundFlight != null)
+                            Console.WriteLine($"ID:{foundFlight.Id.ToString().Substring(0, 8)} - Naziv:{foundFlight.FlightName} - Polazak:{foundFlight.DepartureTime} - Dolazak:{foundFlight.ArrivalTime} - Udaljenost:{foundFlight.Distance}km - Trajanje:{foundFlight.FlightDuration}min");
+                        else
+                            Console.WriteLine("Let nije pronađen.");
+
+                        Console.WriteLine("Let upješno ispisan.");
+                        Console.ReadKey();
+                        return;
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("PRETRAGA LETA PO NAZIVU\nRezervirani letovi:");
+                        foreach (var flightId in currentPassenger.GetReservedFlightIds())
+                        {
+                            var flight = AllFlights.Find(flight => flight.Id == flightId);
+                            if (flight != null)
+                            {
+                                Console.WriteLine($"Naziv:{flight.FlightName}");
+                            }
+                        }
+
+                        string flightInputName = InputValidator.ReadString("Unesite Naziv leta koji želite pronaći: ");
+                        var foundFlightName = AllFlights.Find(flight => flight.FlightName == flightInputName);
+
+                        if (foundFlightName != null)
+                            Console.WriteLine($"ID:{foundFlightName.Id.ToString().Substring(0, 8)} - Naziv:{foundFlightName.FlightName} - Polazak:{foundFlightName.DepartureTime} - Dolazak:{foundFlightName.ArrivalTime} - Udaljenost:{foundFlightName.Distance}km - Trajanje:{foundFlightName.FlightDuration}min");
+                        else
+                            Console.WriteLine("Let nije pronađen.");
+
+                        Console.WriteLine("Let upješno ispisan.");
+                        Console.ReadKey();
+                        return;
+
+                    default:
+                        Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                        Console.ReadKey();
+                        return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                Console.ReadKey();
+                return;
+            }
+
+
+
+        }
+        static void CancelPassengerFlight(Passenger currentPassenger)
+        {
+            Console.Clear();
+            Console.WriteLine("OTKAZIVANJE LETA");
+            if (currentPassenger.GetReservedFlightIds().Count == 0)
+            {
+                Console.WriteLine("Nemate rezerviranih letova.");
+                Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                Console.ReadKey();
+                return;
+            }
+            Console.WriteLine("Rezervirani letovi: ");
+            foreach (var flightId in currentPassenger.GetReservedFlightIds())
+            {
+                var flight = AllFlights.Find(flight => flight.Id == flightId);
+                if (flight != null)
+                {
+                    Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)} - Naziv:{flight.FlightName} - Polazak:{flight.DepartureTime} - Dolazak:{flight.ArrivalTime} - Udaljenost:{flight.Distance}km - Trajanje:{flight.FlightDuration}min");
+                }
+            }
+            var foundFlight = FindFlightById(currentPassenger);
+            if (foundFlight != null)
+            {
+                Console.WriteLine("Let pronađen");
+                if ((foundFlight.DepartureTime - DateTime.Now).TotalHours > 24)
+                {
+                    Console.WriteLine("Let polijeće unutar 24 sata, nije moguće otkazati");
+                    return;
+                }
+                if (!InputValidator.ConfirmAction("Jeste li sigurni da želite otkazati let?"))
+                {
+                    Console.WriteLine("Otkazivanje leta je otkazano.");
+                    Console.ReadKey();
+                    return;
+                }
+
+                if (!foundFlight.RemovePassenger(currentPassenger.Id))
+                {
+                    Console.WriteLine("Greška pri otkazivanju leta.");
+                    Console.ReadKey();
+                    return;
+                }
+                else
+                {
+                    currentPassenger.RemoveReservedFlight(foundFlight.Id);
+                    Console.WriteLine("Let uspješno otkazan.");
+                    Console.ReadKey();
+                    return;
+                }
+            }
+            else
+                Console.WriteLine("Let nije pronađen.");
+            Console.ReadKey();
+            return;
+        }
         static void PrintAllFlights()
         {
             Console.Clear();
             Console.WriteLine("PRIKAZ SVIH LETOVA\n");
 
-            foreach (var flight in AllFlights)            
+            foreach (var flight in AllFlights)
                 Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)} - Naziv:{flight.FlightName} - Polazak:{flight.DepartureTime} - Dolazak:{flight.ArrivalTime} - Udaljenost:{flight.Distance}km - Trajanje:{flight.FlightDuration}min");
+
             
-            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
             Console.ReadKey();
             return;
 
@@ -255,6 +472,25 @@ namespace Internship_3_OOP
                 Console.ReadKey();
                 return;
             }
+        }
+
+
+        static Flight FindFlightById(Passenger currentPassenger)
+
+        {
+            Console.WriteLine("Unesite ID leta koji želite pronaći (prvih 8 znakova):");
+            string shortId = Console.ReadLine().Trim() ?? string.Empty;
+            var currentPassengerFlights = currentPassenger.GetReservedFlightIds();
+            var foundFlight = currentPassengerFlights.FirstOrDefault(flightId => flightId.ToString().StartsWith(shortId));
+            if (foundFlight != Guid.Empty)
+            {
+                return AllFlights.Find(flight => flight.Id == foundFlight);
+            }
+            else
+            {
+                return null;
+            }
+            
         }
     }
 }

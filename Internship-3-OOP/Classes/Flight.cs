@@ -50,6 +50,11 @@
             return false;
         }
 
+        public bool IsFull()
+        {
+            return ReservedPassengerIds.Count >= Capacity;
+        }
+
 
     }
 }
