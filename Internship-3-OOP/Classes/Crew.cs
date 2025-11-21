@@ -10,10 +10,24 @@
 
         public void PrintCrewInfo()
         {
-            Console.Write($"\nID:{Id}");
+            Console.WriteLine($"ID:{Id}");
+           
             for (int i = 0; i < 4; i++)
             {
-                Console.Write($"Ime: {Employees[0].FirstName} - Prezime: {Employees[0].LastName} - Spol: {Employees[0].FirstName} - Pozicija: {Employees[0].Position}");
+                string jobPosition = "pilot";
+                switch (Employees[i].Position)
+                {                    
+                    case JobPosition.CoPilot:
+                        jobPosition = "kopilot";
+                        break;
+                    case JobPosition.FlightAttendant:
+                        jobPosition = Employees[i].Gender == "M" ? "stjuard" : "stjuardesa" ;
+                        break;
+                    default:
+                        break;
+                }
+
+               Console.WriteLine($"Ime: {Employees[i].FirstName} - Prezime: {Employees[i].LastName} - Spol: {Employees[i].Gender} - Pozicija: {jobPosition}");
                 
             }
         }

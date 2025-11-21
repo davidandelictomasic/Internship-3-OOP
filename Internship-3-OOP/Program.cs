@@ -20,24 +20,67 @@ namespace Internship_3_OOP
                 yearOfBirth: 1995,
                 email: "ana.horvat@example.com",
                 password: "Password1"
-            );            
-            AllPassengers.Add(Passenger1);
-            var Flight1 = new Flight(
-                origin: "ZAG",
-                destination: "LHR",
-                departureTime: DateTime.Today.AddHours(500),
-                arrivalTime: DateTime.Today.AddHours(504),
-                capacity: 180,
-                distance: 1500.0
-            );            
-            AllFlights.Add(Flight1);
-            var Aircraft1 = new Aircraft(
-                name: "Boeing 737",
-                yearOfProduction: 2010,
-                aircraftSeatCategories: new List<SeatCategories> { SeatCategories.Standard, SeatCategories.Business },
-                seatCategoriesAvailability: new List<int> { 150, 30 }
             );
-            
+            var Passenger2 = new Passenger("Marko", "Kovač", 1988, "marko.kovac@example.com", "SecurePass2");
+
+            var Passenger3 = new Passenger("Ivana", "Babić", 2001, "ivana.babic@example.com", "MyPassword3");
+
+            AllPassengers.AddRange(new List<Passenger> { Passenger2, Passenger3 });
+
+            var Flight1 = new Flight("ZAG", "LHR", DateTime.Today.AddHours(500), DateTime.Today.AddHours(504), 180, 1500.0);
+
+            var Flight2 = new Flight("ZAG", "CDG", DateTime.Today.AddHours(520), DateTime.Today.AddHours(523), 160, 1080.0);
+
+            var Flight3 = new Flight("LHR", "JFK", DateTime.Today.AddHours(540), DateTime.Today.AddHours(548), 250, 5560.0);
+
+            var Flight4 = new Flight("FRA", "ZAG", DateTime.Today.AddHours(560), DateTime.Today.AddHours(562), 140, 610.0);
+
+            var Flight5 = new Flight("ZAG", "DXB", DateTime.Today.AddHours(580), DateTime.Today.AddHours(587), 200, 4200.0);
+
+
+            AllFlights.AddRange(new List<Flight> { Flight2, Flight3, Flight4, Flight5 });
+
+            var Aircraft1 = new Aircraft("Boeing 737", 2010,
+                new List<SeatCategories> { SeatCategories.Standard, SeatCategories.Business },
+                new List<int> { 150, 30 });
+
+            var Aircraft2 = new Aircraft("Airbus A320", 2015,
+                new List<SeatCategories> { SeatCategories.Standard, SeatCategories.Business },
+                new List<int> { 160, 24 });
+
+            var Aircraft3 = new Aircraft("Boeing 787 Dreamliner", 2018,
+                new List<SeatCategories> { SeatCategories.Standard, SeatCategories.Business, SeatCategories.VIP },
+                new List<int> { 210, 35, 10 });
+
+            var Aircraft4 = new Aircraft("Airbus A350", 2020,
+                new List<SeatCategories> { SeatCategories.Standard, SeatCategories.VIP },
+                new List<int> { 240, 12 });
+
+
+            AllAircrafts.AddRange(new List<Aircraft> { Aircraft2, Aircraft3, Aircraft4 });
+
+            var Emp1 = new Employee("Ivan", "Maric", 1984, JobPosition.Pilot, "M");
+            var Emp2 = new Employee("Dario", "Kovacevic", 1979, JobPosition.Pilot, "M");
+
+            var Emp3 = new Employee("Petra", "Horvat", 1988, JobPosition.CoPilot, "Z");
+            var Emp4 = new Employee("Marko", "Janjic", 1991, JobPosition.CoPilot, "M");
+
+            var Emp5 = new Employee("Lana", "Bicanic", 1995, JobPosition.FlightAttendant, "Z");
+            var Emp6 = new Employee("Sara", "Vukovic", 1997, JobPosition.FlightAttendant, "Z");
+            var Emp7 = new Employee("Ena", "Knez", 1999, JobPosition.FlightAttendant, "Z");
+            var Emp8 = new Employee("Tomislav", "Bosnjak", 1993, JobPosition.FlightAttendant, "M");
+            var Emp9 = new Employee("Maja", "Grgic", 2000, JobPosition.FlightAttendant, "Z");
+
+            AllEmployees.AddRange(new List<Employee> { Emp1, Emp2, Emp3, Emp4, Emp5, Emp6, Emp7, Emp8, Emp9 });
+
+            var Crew1 = new Crew(new List<Employee> { Emp1, Emp4, Emp5, Emp6 }) ;
+
+            Emp1.SetAvailability(false);
+            Emp4.SetAvailability(false);
+            Emp5.SetAvailability(false);
+            Emp6.SetAvailability(false);
+
+            AllCrews.Add(Crew1 );
 
             ShowStartingMenu();
 
