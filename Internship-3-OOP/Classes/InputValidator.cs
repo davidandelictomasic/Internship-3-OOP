@@ -236,5 +236,83 @@ namespace Internship_3_OOP.Classes
             }
         }
 
+        public static SeatCategories ReadSeatCategory(string prompt)
+        {
+            SeatCategories result;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine()?.Trim();
+
+                if (!SeatCategories.TryParse(input, out result))
+                {
+                    Console.WriteLine("Neispravan unos. .");
+                    continue;
+                }
+
+                
+                return result;
+            }
+        }
+        public static List<SeatCategories> ReadSeatCategoryList(string message)
+        {
+            while (true)
+            {
+                Console.Write($"{message} (odvojite zarezima, npr: standard, business, vip): ");
+                string input = Console.ReadLine().Trim();
+
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("Morate unijeti barem jednu kategoriju.");
+                    continue;
+                }
+
+                var parts = input.Split(',')
+                                 .Select(p => p.Trim().ToLower())
+                                 .Where(p => p.Length > 0)
+                                 .Distinct()
+                                 .ToList();
+
+                List<SeatCategories> categories = new();
+
+                bool error = false;
+
+                foreach (var p in parts)
+                {
+                    switch (p)
+                    {
+                        case "standard":
+                            categories.Add(SeatCategories.Standard);
+                            break;
+                        case "business":
+                            categories.Add(SeatCategories.Business);
+                            break;
+                        case "vip":
+                            categories.Add(SeatCategories.VIP);
+                            break;
+                        default:
+                            Console.WriteLine($"Nepoznata kategorija: '{p}'");
+                            error = true;
+                            break;
+                    }
+                }
+
+                if (error)
+                {
+                    Console.WriteLine("Pokušajte ponovo.\n");
+                    continue;
+                }
+
+                if (categories.Count == 0)
+                {
+                    Console.WriteLine("Niste unijeli ispravne kategorije.");
+                    continue;
+                }
+
+                return categories;
+            }
+        }
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using Internship_3_OOP.Classes;
 
 namespace Internship_3_OOP
@@ -7,6 +8,8 @@ namespace Internship_3_OOP
     {
         public static List<Passenger> AllPassengers = new();
         public static List<Flight> AllFlights = new();
+        public static List<Reservation> AllReservations = new();
+        public static List<Aircraft> AllAircrafts = new();
         static void Main(string[] args)
         {
             var Passenger1 = new Passenger(
@@ -50,7 +53,7 @@ namespace Internship_3_OOP
                             ShowFlightMenu();
                             break;
                         case 3:
-
+                            ShowAircraftMenu();
                             break;
                         case 4:
 
@@ -198,6 +201,46 @@ namespace Internship_3_OOP
                 }
             }
         }
+        static void ShowAircraftMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("IZBORNIK AVIONA\n1 - Prikaz svih aviona\n2 - Dodavanje aviona\n3 - Pretraživanje aviona\n4 - Brisanje aviona\n5 - Povratak na prethodni izbornik");
+                Console.Write("Odabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int userChoice))
+                {
+                    switch (userChoice)
+                    {
+                        case 1:
+                            PrintAllAircrafts();
+                            break;
+                        case 2:
+                            AddAircraft();
+                            break;
+                        case 3:
+                            SearchAircraft();
+                            break;
+                        case 4:
+                            DeleteAircraft();
+                            break;                       
+                        case 5:
+                            return;
+                        default:
+                            Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                            Console.ReadKey();
+                            continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                    Console.ReadKey();
+                    continue;
+                }
+            }
+        }
         static void RegisterPassenger()
         {
             Console.Clear();
@@ -274,6 +317,8 @@ namespace Internship_3_OOP
                     Console.ReadKey();
                     return;
                 }
+                
+                var category = InputValidator.ReadSeatCategory("Odaberie kategoriju leta (standard, business, VIP): ");
                 if (!InputValidator.ConfirmAction("Jeste li sigurni da želite rezervirati let?"))
                 {
                     Console.WriteLine("Rezervacija leta je otkazana.");
@@ -290,7 +335,8 @@ namespace Internship_3_OOP
                 {
                     if (currentPassenger.AddReservedFlight(foundFlight.Id))
                     {
-
+                        var reservation = new Reservation(currentPassenger.Id, foundFlight.Id, category);
+                        AllReservations.Add(reservation);
                         Console.WriteLine("Let uspješno rezerviran.");
                         Console.ReadKey();
                         return;
@@ -429,6 +475,7 @@ namespace Internship_3_OOP
                 }
                 else
                 {
+                    AllReservations.Remove(AllReservations.First(r => r.FlightId == foundFlight.Id));
                     currentPassenger.RemoveReservedFlight(foundFlight.Id);
                     Console.WriteLine("Let uspješno otkazan.");
                     Console.ReadKey();
@@ -507,7 +554,7 @@ namespace Internship_3_OOP
                         return;
                     case 2:
                         Console.Clear();
-                        Console.WriteLine("PRETRAGA LETA PO NAZIVU\nRezervirani letovi:");
+                        Console.WriteLine("PRETRAGA LETA PO NAZIVU\nSvi letovi:");
                         foreach (var flight in AllFlights)
                             Console.WriteLine($"Naziv:{flight.FlightName}");
 
@@ -652,8 +699,216 @@ namespace Internship_3_OOP
             Console.ReadKey();
             return;
         }
+        static void PrintAllAircrafts()
+        {
+            Console.Clear();
+            Console.WriteLine("SVI AVIONI\n");
+            if(AllAircrafts.Count == 0)
+            {
+                Console.WriteLine("Ne postoji ni jedan avion.");
+                Console.WriteLine("Pritisnite bilo koju tipku za povratak na izbornik...");
+                Console.ReadKey();
+                return;
+            }
+            foreach (var aircraft in AllAircrafts)
+            {
+                Console.WriteLine($"ID:{aircraft.Id.ToString().Substring(0, 8)} - Naziv:{aircraft.Name} - Godina proizvodnje:{aircraft.YearOfProduction} - Kategorije sjedala:{string.Join(", ", aircraft.AircraftSeatCategories)}");
+            }
+            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+            Console.ReadKey();
+            return;
+        }
+        static void AddAircraft()
+        {
+            Console.Clear();
+            Console.WriteLine("DODAVANJE NOVOG AVIONA\n");
+            string name = InputValidator.ReadString("Unesite naziv aviona: ");
+            int yearOfProduction = InputValidator.ReadInt("Unesite godinu proizvodnje aviona: ");
+            List<SeatCategories> aircraftSeatCategories = InputValidator.ReadSeatCategoryList("Unesite kategorije sjedala dostupne u avionu");
+            List<int> seatCategoriesAvailability = new();
+            foreach (var category in aircraftSeatCategories)
+            {
+                
+                int availability = InputValidator.ReadInt($"Unesite broj dostupnih sjedala za kategoriju {category}: ");
+                seatCategoriesAvailability.Add(availability);
+            }
+            if (InputValidator.ConfirmAction("Jeste li sigurni da želite unijeti avion?"))
+            {
 
-            static Flight FindFlightById(Passenger currentPassenger)
+                Console.WriteLine("Avion je uspješno dodan.");
+                var aircraft = new Aircraft(name, yearOfProduction, aircraftSeatCategories, seatCategoriesAvailability);
+                AllAircrafts.Add(aircraft);
+                Console.ReadKey();
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Dodavanje aviona je otkazano.");
+                Console.ReadKey();
+                return;
+            }
+        }               
+        static void SearchAircraft()
+        {
+            Console.Clear();
+            if (AllAircrafts.Count == 0)
+            {
+                Console.WriteLine("Ne postoji ni jedan avion.");
+                Console.WriteLine("Pritisnite bilo koju tipku za povratak na izbornik...");
+                Console.ReadKey();
+                return;
+            }
+            Console.WriteLine("PRETRAŽIVANJE AVIONA\nOdaberite načina pretraživanja\n1 - ID\n2 - Naziv");
+            if (int.TryParse(Console.ReadLine(), out int userChoice))
+            {
+                switch (userChoice)
+                {
+                    case 1:
+                        Console.Clear();
+                        Console.WriteLine("PRETRAGA AVIONA PO ID-U\nSvi avioni:");
+                        foreach (var aircraft in AllAircrafts)
+                            Console.WriteLine($"ID:{aircraft.Id.ToString().Substring(0, 8)}");
+
+
+                        var foundAircraft = FindAircraftById("Unesite ID aviona koji želite pretražiti: ");
+                        if (foundAircraft != null)
+                        {
+
+                            Console.WriteLine($"ID:{foundAircraft.Id.ToString().Substring(0, 8)} - Naziv:{foundAircraft.Name} - Godina proizvodnje:{foundAircraft.YearOfProduction} - Kategorije sjedala:{string.Join(", ", foundAircraft.AircraftSeatCategories)}");
+                            Console.WriteLine("Avion uspješno pronađen.");
+                        }
+                        else
+                            Console.WriteLine("Avion nije pronađen.");
+                        Console.ReadKey();
+                        return;
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("PRETRAGA AVIONA PO NAZIVU\nSvi avioni:");
+                        foreach (var aircraft in AllAircrafts)
+                            Console.WriteLine($"Naziv:{aircraft.Name}");
+
+                        string aircraftInputName = InputValidator.ReadString("Unesite Naziv aviona koji želite pronaći: ");
+                        var foundAircraftName = AllAircrafts.Find(aircraft => aircraft.Name == aircraftInputName);
+
+                        if (foundAircraftName != null)
+                        {
+                            Console.WriteLine($"ID:{foundAircraftName.Id.ToString().Substring(0, 8)} - Naziv:{foundAircraftName.Name} - Godina proizvodnje:{foundAircraftName.YearOfProduction} - Kategorije sjedala:{string.Join(", ", foundAircraftName.AircraftSeatCategories)}");
+                            Console.WriteLine("Avion upješno pronađen.");
+                        }
+                        else
+                            Console.WriteLine("Avion nije pronađen.");
+
+
+                        Console.ReadKey();
+                        return;
+
+                    default:
+                        Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                        Console.ReadKey();
+                        return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                Console.ReadKey();
+                return;
+            }
+
+
+        }
+        static void DeleteAircraft() {
+            Console.Clear();
+            if (AllAircrafts.Count == 0)
+            {
+                Console.WriteLine("Ne postoji ni jedan avion.");
+                Console.WriteLine("Pritisnite bilo koju tipku za povratak na izbornik...");
+                Console.ReadKey();
+                return;
+            }
+            Console.WriteLine("BRISANJE AVIONA\nOdaberite načina brisanja\n1 - ID\n2 - Naziv");
+            if (int.TryParse(Console.ReadLine(), out int userChoice))
+            {
+                switch (userChoice)
+                {
+                    case 1:
+                        Console.Clear();
+                        Console.WriteLine("BRISANJE AVIONA PO ID-U\nSvi avioni:");
+                        foreach (var aircraft in AllAircrafts)
+                            Console.WriteLine($"ID:{aircraft.Id.ToString().Substring(0, 8)}");
+
+
+                        var foundAircraft = FindAircraftById("Unesite ID aviona koji želite izbrisati: ");
+                        if (foundAircraft != null)
+                        {
+
+                            Console.WriteLine($"ID:{foundAircraft.Id.ToString().Substring(0, 8)} - Naziv:{foundAircraft.Name} - Godina proizvodnje:{foundAircraft.YearOfProduction} - Kategorije sjedala:{string.Join(", ", foundAircraft.AircraftSeatCategories)}");
+                            Console.WriteLine("Avion uspješno pronađen.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Avion nije pronađen.");
+                            Console.ReadKey();
+                            return;
+                        }
+                        if (!InputValidator.ConfirmAction("Jeste li sigurni da želite izbrisati avion?"))
+                        {
+                            Console.WriteLine("Brisanje aviona otkazano.");
+                            Console.ReadKey();
+                            return;
+                        }
+                        AllAircrafts.Remove(foundAircraft);
+                        Console.WriteLine("Brisanje aviona uspješno.");
+
+                        Console.ReadKey();
+                        return;
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("BRISANJE AVIONA PO NAZIVU\nSvi avioni:");
+                        foreach (var aircraft in AllAircrafts)
+                            Console.WriteLine($"Naziv:{aircraft.Name}");
+
+                        string aircraftInputName = InputValidator.ReadString("Unesite Naziv aviona koji želite izbrisati: ");
+                        var foundAircraftName = AllAircrafts.Find(aircraft => aircraft.Name == aircraftInputName);
+
+                        if (foundAircraftName != null)
+                        {
+                            Console.WriteLine($"ID:{foundAircraftName.Id.ToString().Substring(0, 8)} - Naziv:{foundAircraftName.Name} - Godina proizvodnje:{foundAircraftName.YearOfProduction} - Kategorije sjedala:{string.Join(", ", foundAircraftName.AircraftSeatCategories)}");
+                            Console.WriteLine("Avion upješno pronađen.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Avion nije pronađen.");
+                            Console.ReadKey();
+                            return;
+                        }
+                        if(!InputValidator.ConfirmAction("Jeste li sigurni da želite izbrisati avion?"))
+                        {
+                            Console.WriteLine("Brisanje aviona otkazano.");
+                            Console.ReadKey();
+                            return;
+                        }
+                        AllAircrafts.Remove(foundAircraftName);
+                        Console.WriteLine("Brisanje aviona uspješno.");
+
+                        Console.ReadKey();
+                        return;
+
+                    default:
+                        Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                        Console.ReadKey();
+                        return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                Console.ReadKey();
+                return;
+            }
+        }
+
+        static Flight FindFlightById(Passenger currentPassenger)
 
             {
                 Console.WriteLine("Unesite ID leta koji želite pronaći (prvih 8 znakova):");
@@ -670,7 +925,7 @@ namespace Internship_3_OOP
                 }
 
             }
-            static Flight FindFlightById(string prompt)
+        static Flight FindFlightById(string prompt)
             {
                 Console.WriteLine(prompt);
                 string shortId = Console.ReadLine().Trim() ?? string.Empty;
@@ -679,5 +934,14 @@ namespace Internship_3_OOP
                     return null;
                 return AllFlights[foundFlightIndex];
             }
+        static Aircraft FindAircraftById(string prompt)
+        {
+            Console.WriteLine(prompt);
+            string shortId = Console.ReadLine().Trim() ?? string.Empty;
+            var foundAircraftIndex = AllAircrafts.FindIndex(aircraft => aircraft.Id.ToString().StartsWith(shortId));
+            if (foundAircraftIndex == -1)
+                return null;
+            return AllAircrafts[foundAircraftIndex];
+        }
     }
 }
