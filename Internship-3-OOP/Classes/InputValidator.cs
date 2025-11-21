@@ -312,6 +312,45 @@ namespace Internship_3_OOP.Classes
                 return categories;
             }
         }
+        public static JobPosition ReadJobPosition(string prompt)
+        {
+            JobPosition result;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine()?.Trim();
+
+                if (!JobPosition.TryParse(input, out result))
+                {
+                    Console.WriteLine("Neispravan unos. .");
+                    continue;
+                }
+
+
+                return result;
+            }
+        }
+
+        public static string ReadGender(string prompt)
+        {
+            string result;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine()?.Trim().ToUpper();
+
+                if (input != "M" && input != "Z" && input == null)
+                {
+                    Console.WriteLine("Neispravan unos. .");
+                    
+                    continue;
+                }
+                result = input;
+
+
+                return result;
+            }
+        }
 
 
     }
