@@ -25,7 +25,7 @@ namespace Internship_3_OOP
 
             var Passenger3 = new Passenger("Ivana", "Babić", 2001, "ivana.babic@example.com", "MyPassword3");
 
-            AllPassengers.AddRange(new List<Passenger> { Passenger2, Passenger3 });
+            AllPassengers.AddRange(new List<Passenger> {Passenger1, Passenger2, Passenger3 });
 
            
 
@@ -399,51 +399,53 @@ namespace Internship_3_OOP
                 flight.PrintInfo();
 
             var foundFlight = FindFlightById("Unesite ID leta koji želite rezervirati (prvih 8 znakova):");
-            if (foundFlight != null)
+            if (foundFlight == null)
             {
-                Console.WriteLine("Let pronađen");
-                if (foundFlight.IsFull())
-                {
-                    Console.WriteLine("Let je pun, nije moguće rezervirati.");
-                    Console.ReadKey();
-                    return;
-                }
-                
-                var category = InputValidator.ReadSeatCategory("Odaberie kategoriju leta (standard, business, VIP): ");
-                if (!InputValidator.ConfirmAction("Jeste li sigurni da želite rezervirati let?"))
-                {
-                    Console.WriteLine("Rezervacija leta je otkazana.");
-                    Console.ReadKey();
-                    return;
-                }
-                if (!foundFlight.AddPassenger(currentPassenger.Id))
-                {
-                    Console.WriteLine("Greška pri rezervaciji leta.");
-                    Console.ReadKey();
-                    return;
-                }
-                else
-                {
-                    if (currentPassenger.AddReservedFlight(foundFlight.Id))
-                    {
-                        var reservation = new Reservation(currentPassenger.Id, foundFlight.Id, category);
-                        AllReservations.Add(reservation);
-                        Console.WriteLine("Let uspješno rezerviran.");
-                        Console.ReadKey();
-                        return;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Greška pri rezervaciji leta.");
-                        Console.ReadKey();
-                        return;
-                    }
-                }
-            }
-            else
                 Console.WriteLine("Let nije pronađen.");
+                Console.ReadKey();
+                return;
+            }
+            Console.WriteLine("Let pronađen");
+            if (foundFlight.IsFull())
+            {
+                Console.WriteLine("Let je pun, nije moguće rezervirati.");
+                Console.ReadKey();
+                return;
+            }
+
+            var category = InputValidator.ReadValidSeatCategory(foundFlight);
+
+            if (!InputValidator.ConfirmAction("Jeste li sigurni da želite rezervirati let?"))
+            {
+                Console.WriteLine("Rezervacija leta je otkazana.");
+                Console.ReadKey();
+                return;
+            }
+            if (!foundFlight.AddPassenger(currentPassenger.Id))
+            {
+                Console.WriteLine("Greška pri rezervaciji leta.");
+                Console.ReadKey();
+                return;
+            }
+            
+            if (!currentPassenger.AddReservedFlight(foundFlight.Id))
+            {
+                foundFlight.RemovePassenger(currentPassenger.Id);
+                Console.WriteLine("Greška pri rezervaciji leta.");
+                Console.ReadKey();
+                return;
+
+            }
+            foundFlight.ReservedSeatsByCategory[category]++;
+            var reservation = new Reservation(currentPassenger.Id, foundFlight.Id, category);
+            AllReservations.Add(reservation);
+            Console.WriteLine("Let uspješno rezerviran.");
             Console.ReadKey();
             return;
+
+
+
+
         }
         static void SearchPassengerFlight(Passenger currentPassenger)
         {
@@ -622,7 +624,7 @@ namespace Internship_3_OOP
 
             Console.WriteLine("Sve posade:");
             foreach (Crew crew in AllCrews)
-                Console.WriteLine($"ID:{crew.Id}");
+                Console.WriteLine($"ID:{crew.Id.ToString().Substring(0, 8)}");
             Console.Write("Unesite ID posade koja će biti dodana letu (prvih 8 znakova): ");
             string shortId = Console.ReadLine().Trim() ?? string.Empty;
             var foundCrewIndex = AllCrews.FindIndex(crew => crew.Id.ToString().StartsWith(shortId));

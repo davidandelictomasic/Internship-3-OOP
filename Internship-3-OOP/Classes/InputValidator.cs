@@ -351,6 +351,27 @@ namespace Internship_3_OOP.Classes
                 return result;
             }
         }
+        public static SeatCategories ReadValidSeatCategory(Flight flight)
+        {
+            while (true)
+            {
+                SeatCategories category = ReadSeatCategory("Odaberite kategoriju sjedala (standard, business, VIP): ");
+
+                if (!flight.HasCategory(category))
+                {
+                    Console.WriteLine("Ovaj let nema tu kategoriju sjedala! Pokušajte ponovno.");
+                    continue;
+                }
+
+                if (!flight.HasFreeSeatInCategory(category))
+                {
+                    Console.WriteLine("Nema slobodnih mjesta u toj kategoriji. Pokušajte drugu.");
+                    continue;
+                }
+
+                return category;
+            }
+        }
 
 
     }

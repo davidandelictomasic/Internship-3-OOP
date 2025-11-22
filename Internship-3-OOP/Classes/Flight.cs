@@ -14,6 +14,8 @@
         public Crew FlightCrew { get; set; }
 
         private List<Guid> ReservedPassengerIds = new();
+        public Dictionary<SeatCategories, int> ReservedSeatsByCategory { get; set; }
+
         public IReadOnlyList<Guid> GetReservedPassengerIds()
         {
             return ReservedPassengerIds.AsReadOnly();
@@ -30,6 +32,14 @@
             Distance = distance;
             FlightAircraft = aircraft;
             FlightCrew = crew;
+            ReservedSeatsByCategory = new Dictionary<SeatCategories, int>();
+
+            for (int i = 0; i < aircraft.AircraftSeatCategories.Count; i++)
+            {
+                var cat = aircraft.AircraftSeatCategories[i];
+                ReservedSeatsByCategory[cat] = 0; 
+            }
+
 
         }
 
@@ -58,10 +68,28 @@
         {
             return ReservedPassengerIds.Count >= Capacity;
         }
+
+        
         public void PrintInfo()
         {
             Console.WriteLine($"ID:{Id.ToString().Substring(0, 8)} - Naziv:{FlightName} - Polazak:{DepartureTime} - Dolazak:{ArrivalTime} - Udaljenost:{Distance}km - Trajanje:{FlightDuration}min");
 
+        }
+        public bool HasCategory(SeatCategories category)
+        {
+            return FlightAircraft.AircraftSeatCategories.Contains(category);
+        }
+
+        public bool HasFreeSeatInCategory(SeatCategories category)
+        {
+            int index = FlightAircraft.AircraftSeatCategories.IndexOf(category);
+            if (index == -1)
+                return false;
+
+            int totalSeats = FlightAircraft.SeatCategoriesAvailability[index];
+            int reservedSeats = ReservedSeatsByCategory[category];
+
+            return reservedSeats < totalSeats;
         }
 
 
