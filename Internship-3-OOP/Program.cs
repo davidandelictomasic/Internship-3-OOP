@@ -25,9 +25,9 @@ namespace Internship_3_OOP
 
             var Passenger3 = new Passenger("Ivana", "Babić", 2001, "ivana.babic@example.com", "MyPassword3");
 
-            AllPassengers.AddRange(new List<Passenger> {Passenger1, Passenger2, Passenger3 });
+            AllPassengers.AddRange(new List<Passenger> { Passenger1, Passenger2, Passenger3 });
 
-           
+
 
             var Aircraft1 = new Aircraft("Boeing 737", 2010,
                 new List<SeatCategories> { SeatCategories.Standard, SeatCategories.Business },
@@ -62,24 +62,24 @@ namespace Internship_3_OOP
 
             AllEmployees.AddRange(new List<Employee> { Emp1, Emp2, Emp3, Emp4, Emp5, Emp6, Emp7, Emp8, Emp9 });
 
-            var Crew1 = new Crew(new List<Employee> { Emp1, Emp4, Emp5, Emp6 }) ;
+            var Crew1 = new Crew(new List<Employee> { Emp1, Emp4, Emp5, Emp6 });
 
             Emp1.SetAvailability(false);
             Emp4.SetAvailability(false);
             Emp5.SetAvailability(false);
             Emp6.SetAvailability(false);
 
-            AllCrews.Add(Crew1 );
+            AllCrews.Add(Crew1);
 
-            var Flight1 = new Flight("ZAG", "LHR", DateTime.Today.AddHours(500), DateTime.Today.AddHours(504), 180, 1500.0, Aircraft1,Crew1);
+            var Flight1 = new Flight("ZAG", "LHR", DateTime.Today.AddHours(500), DateTime.Today.AddHours(504), 180, 1500.0, Aircraft1, Crew1);
 
-            var Flight2 = new Flight("ZAG", "CDG", DateTime.Today.AddHours(520), DateTime.Today.AddHours(523), 160, 1080.0,Aircraft3,Crew1);
+            var Flight2 = new Flight("ZAG", "CDG", DateTime.Today.AddHours(520), DateTime.Today.AddHours(523), 160, 1080.0, Aircraft3, Crew1);
 
-            var Flight3 = new Flight("LHR", "JFK", DateTime.Today.AddHours(540), DateTime.Today.AddHours(548), 250, 5560.0,Aircraft1,Crew1);
+            var Flight3 = new Flight("LHR", "JFK", DateTime.Today.AddHours(540), DateTime.Today.AddHours(548), 250, 5560.0, Aircraft1, Crew1);
 
-            var Flight4 = new Flight("FRA", "ZAG", DateTime.Today.AddHours(560), DateTime.Today.AddHours(562), 140, 610.0,Aircraft2,Crew1);
+            var Flight4 = new Flight("FRA", "ZAG", DateTime.Today.AddHours(560), DateTime.Today.AddHours(562), 140, 610.0, Aircraft2, Crew1);
 
-            var Flight5 = new Flight("ZAG", "DXB", DateTime.Today.AddHours(580), DateTime.Today.AddHours(587), 200, 4200.0,Aircraft4,Crew1);
+            var Flight5 = new Flight("ZAG", "DXB", DateTime.Today.AddHours(580), DateTime.Today.AddHours(587), 200, 4200.0, Aircraft4, Crew1);
 
 
             AllFlights.AddRange(new List<Flight> { Flight2, Flight3, Flight4, Flight5 });
@@ -284,7 +284,7 @@ namespace Internship_3_OOP
                             break;
                         case 4:
                             DeleteAircraft();
-                            break;                       
+                            break;
                         case 5:
                             return;
                         default:
@@ -321,7 +321,7 @@ namespace Internship_3_OOP
                             break;
                         case 3:
                             AddEmployee();
-                            break;                        
+                            break;
                         case 4:
                             return;
                         default:
@@ -396,7 +396,7 @@ namespace Internship_3_OOP
                     switch (userChoice)
                     {
                         case 1:
-                            currentPassenger.PrintSortedFlightInfo("DESC","polazak",AllFlights);
+                            currentPassenger.PrintSortedFlightInfo("DESC", "polazak", AllFlights);
                             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
                             Console.ReadKey();
                             return;
@@ -454,7 +454,7 @@ namespace Internship_3_OOP
                     Console.ReadKey();
                     continue;
                 }
-                
+
             }
         }
         static void AddPassengerFlight(Passenger currentPassenger)
@@ -493,7 +493,7 @@ namespace Internship_3_OOP
                 Console.ReadKey();
                 return;
             }
-            
+
             if (!currentPassenger.AddReservedFlight(foundFlight.Id))
             {
                 foundFlight.RemovePassenger(currentPassenger.Id);
@@ -647,8 +647,8 @@ namespace Internship_3_OOP
             return;
         }
         static void PrintAllFlights()
-        {          
-            
+        {
+
             while (true)
             {
                 Console.Clear();
@@ -660,7 +660,7 @@ namespace Internship_3_OOP
                     Console.ReadKey();
                     return;
                 }
-               
+
 
                 Console.WriteLine("NAČIN ISPISIVANJA\n1 - Silazno po vremenu polaska\n2 - Uzlazno po vremenu polaska\n3 - Silazno po vremenu trajanja leta\n4 - Uzlazno po vremenu trajanja leta\n5 - Silazno po udaljenosti\n6 - Uzlazno po udaljenosti\n7 - Abecedno po nazivu\n8 - Normalan ispis");
                 Console.Write("Odabir: ");
@@ -670,37 +670,37 @@ namespace Internship_3_OOP
                     switch (userChoice)
                     {
                         case 1:
-                            PrintSortedFlightInfo("DESC", "polazak", AllFlights);
+                            PrintSortedFlightInfo("DESC", "polazak");
                             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
                             Console.ReadKey();
                             return;
                         case 2:
-                            PrintSortedFlightInfo("ASC", "polazak", AllFlights);
+                            PrintSortedFlightInfo("ASC", "polazak");
                             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
                             Console.ReadKey();
                             return;
                         case 3:
-                            PrintSortedFlightInfo("DESC", "trajanje", AllFlights);
+                            PrintSortedFlightInfo("DESC", "trajanje");
                             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
                             Console.ReadKey();
                             return;
                         case 4:
-                            PrintSortedFlightInfo("ASC", "trajanje", AllFlights);
+                            PrintSortedFlightInfo("ASC", "trajanje");
                             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
                             Console.ReadKey();
                             return;
                         case 5:
-                            PrintSortedFlightInfo("DESC", "udaljenost", AllFlights);
+                            PrintSortedFlightInfo("DESC", "udaljenost");
                             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
                             Console.ReadKey();
                             return;
                         case 6:
-                            PrintSortedFlightInfo("ASC", "udaljenost", AllFlights);
+                            PrintSortedFlightInfo("ASC", "udaljenost");
                             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
                             Console.ReadKey();
                             return;
                         case 7:
-                            PrintSortedFlightInfo("ASC", "naziv", AllFlights);
+                            PrintSortedFlightInfo("ASC", "naziv");
                             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
                             Console.ReadKey();
                             return;
@@ -722,7 +722,7 @@ namespace Internship_3_OOP
                     Console.ReadKey();
                     continue;
                 }
-                
+
             }
 
         }
@@ -733,7 +733,7 @@ namespace Internship_3_OOP
             string origin = InputValidator.ReadString("Unesite polazište: ");
             string destination = InputValidator.ReadString("Unesite odredište: ");
             DateTime departureTime = InputValidator.ReadDateTime("Unesite vrijeme polaska (yyyy-MM-dd HH:mm): ");
-            DateTime arrivalTime = InputValidator.ReadArrivalTime(departureTime,"Unesite vrijeme dolaska (yyyy-MM-dd HH:mm): ");
+            DateTime arrivalTime = InputValidator.ReadArrivalTime(departureTime, "Unesite vrijeme dolaska (yyyy-MM-dd HH:mm): ");
             int capacity = InputValidator.ReadInt("Unesite kapacitet leta: ");
             double distance = InputValidator.ReadDouble("Unesite udaljenost leta (u km): ");
             Console.WriteLine("Svi avioni:");
@@ -744,7 +744,7 @@ namespace Internship_3_OOP
             var foundAircraft = FindAircraftById("Unesite ID aviona koji želite dodati: ");
             if (foundAircraft != null)
             {
-                
+
                 Console.WriteLine("Avion uspješno dodan.");
             }
             else
@@ -772,11 +772,12 @@ namespace Internship_3_OOP
             Console.WriteLine("Posada uspješno dodana.");
 
 
-            var flight = new Flight(origin, destination, departureTime, arrivalTime, capacity, distance,foundAircraft, foundCrew);
+            var flight = new Flight(origin, destination, departureTime, arrivalTime, capacity, distance, foundAircraft, foundCrew);
 
             if (InputValidator.ConfirmAction("Jeste li sigurni da želite unijeti let?"))
             {
                 AllFlights.Add(flight);
+                flight.FlightAircraft.FlightsCount++;
                 Console.WriteLine("Let je uspješno dodan.");
                 Console.ReadKey();
                 return;
@@ -805,7 +806,8 @@ namespace Internship_3_OOP
 
 
                         var foundFlight = FindFlightById("Unesite ID leta koji želite pretražiti: ");
-                        if (foundFlight != null) {
+                        if (foundFlight != null)
+                        {
 
                             foundFlight.PrintInfo();
                             Console.WriteLine("Let uspješno pronađen.");
@@ -852,7 +854,8 @@ namespace Internship_3_OOP
 
 
         }
-        static void UpdateFlightInfo() {
+        static void UpdateFlightInfo()
+        {
             Console.Clear();
             Console.WriteLine("UREĐIVANJE PODATAKA LETA");
 
@@ -920,12 +923,13 @@ namespace Internship_3_OOP
 
 
             }
-            else {
+            else
+            {
                 Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
                 Console.ReadKey();
                 return;
             }
-            
+
         }
         static void DeleteFlight()
         {
@@ -950,35 +954,89 @@ namespace Internship_3_OOP
                 Console.ReadKey();
                 return;
             }
-            if(!InputValidator.ConfirmAction("Jeste li sigurni da želite izbrisati let?"))
+            if (!InputValidator.ConfirmAction("Jeste li sigurni da želite izbrisati let?"))
             {
                 Console.WriteLine("Brisanje leta otkazano.");
                 Console.ReadKey();
                 return;
             }
-            AllFlights.Remove(foundFlight); 
+            AllFlights.Remove(foundFlight);
             Console.WriteLine("Brisanje leta uspješno.");
             Console.ReadKey();
             return;
         }
         static void PrintAllAircrafts()
         {
-            Console.Clear();
-            Console.WriteLine("SVI AVIONI\n");
-            if(AllAircrafts.Count == 0)
+
+
+
+
+
+            while (true)
             {
-                Console.WriteLine("Ne postoji ni jedan avion.");
-                Console.WriteLine("Pritisnite bilo koju tipku za povratak na izbornik...");
-                Console.ReadKey();
-                return;
+                Console.Clear();
+                Console.WriteLine("SVI AVIONI\n");
+                if (AllAircrafts.Count == 0)
+                {
+                    Console.WriteLine("Ne postoji ni jedan avion.");
+                    Console.WriteLine("Pritisnite bilo koju tipku za povratak na izbornik...");
+                    Console.ReadKey();
+                    return;
+                }
+
+
+                Console.WriteLine("NAČIN ISPISIVANJA\n1 - Po vremenu dodavanja\n2 - Godina proizvodnje uzlazno\n3 - Godina proizvodnje silazno\n4 - Broj odrađenih letova uzlazno \n5 - Broj odrađenih letova silazno\n6 - Normalan ispis");
+                Console.Write("Odabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int userChoice))
+                {
+                    switch (userChoice)
+                    {
+                        case 1:
+                            PrintSortedAircraftInfo("ASC", "dodan");
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 2:
+                            PrintSortedAircraftInfo("ASC", "proizvodnja");
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 3:
+                            PrintSortedAircraftInfo("DESC", "proizvodnja");
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 4:
+                            PrintSortedAircraftInfo("ASC", "letovi");
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 5:
+                            PrintSortedAircraftInfo("DESC", "letovi");
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 6:
+                            foreach (var aircraft in AllAircrafts)
+                                aircraft.PrintInfo();
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        default:
+                            Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                            Console.ReadKey();
+                            continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                    Console.ReadKey();
+                    continue;
+                }
+
             }
-
-            foreach (var aircraft in AllAircrafts)
-                aircraft.PrintInfo();
-
-            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
-            Console.ReadKey();
-            return;
         }
         static void AddAircraft()
         {
@@ -990,7 +1048,7 @@ namespace Internship_3_OOP
             List<int> seatCategoriesAvailability = new();
             foreach (var category in aircraftSeatCategories)
             {
-                
+
                 int availability = InputValidator.ReadInt($"Unesite broj dostupnih sjedala za kategoriju {category}: ");
                 seatCategoriesAvailability.Add(availability);
             }
@@ -1009,7 +1067,7 @@ namespace Internship_3_OOP
                 Console.ReadKey();
                 return;
             }
-        }               
+        }
         static void SearchAircraft()
         {
             Console.Clear();
@@ -1053,7 +1111,7 @@ namespace Internship_3_OOP
 
                         if (foundAircraftName != null)
                         {
-                            foundAircraftName.PrintInfo(); 
+                            foundAircraftName.PrintInfo();
                             Console.WriteLine("Avion upješno pronađen.");
                         }
                         else
@@ -1078,7 +1136,8 @@ namespace Internship_3_OOP
 
 
         }
-        static void DeleteAircraft() {
+        static void DeleteAircraft()
+        {
             Console.Clear();
             if (AllAircrafts.Count == 0)
             {
@@ -1142,7 +1201,7 @@ namespace Internship_3_OOP
                             Console.ReadKey();
                             return;
                         }
-                        if(!InputValidator.ConfirmAction("Jeste li sigurni da želite izbrisati avion?"))
+                        if (!InputValidator.ConfirmAction("Jeste li sigurni da želite izbrisati avion?"))
                         {
                             Console.WriteLine("Brisanje aviona otkazano.");
                             Console.ReadKey();
@@ -1171,16 +1230,16 @@ namespace Internship_3_OOP
         {
             Console.Clear();
             Console.WriteLine("ISPIS SVIH POSADA\n");
-            if(AllCrews.Count == 0)
+            if (AllCrews.Count == 0)
             {
                 Console.WriteLine("Nema ni jedna posada");
                 Console.ReadKey();
                 return;
             }
-            foreach(Crew crew in AllCrews)                           
-                crew.PrintCrewInfo();      
-               
-            
+            foreach (Crew crew in AllCrews)
+                crew.PrintCrewInfo();
+
+
             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
             Console.ReadKey();
             return;
@@ -1188,8 +1247,8 @@ namespace Internship_3_OOP
         static void AddCrew()
         {
             Console.Clear();
-            Console.WriteLine("DODAVANJE NOVE POSADE\n");         
-  
+            Console.WriteLine("DODAVANJE NOVE POSADE\n");
+
             var pilot = SelectAvailableCrewMembers("Dostupni piloti:", JobPosition.Pilot);
             if (pilot == null)
             {
@@ -1197,7 +1256,7 @@ namespace Internship_3_OOP
                 Console.ReadKey();
                 return;
             }
-           
+
             var copilot = SelectAvailableCrewMembers("Dostupni kopiloti:", JobPosition.CoPilot);
             if (copilot == null)
             {
@@ -1206,7 +1265,7 @@ namespace Internship_3_OOP
                 return;
             }
             var flightAttendantFirst = SelectAvailableCrewMembers("Dostupne stjuardese:", JobPosition.FlightAttendant);
-            
+
             if (flightAttendantFirst == null)
             {
                 Console.WriteLine("Stjuardesa nije pronađen/a.");
@@ -1225,7 +1284,7 @@ namespace Internship_3_OOP
             if (InputValidator.ConfirmAction("Jeste li sigurni da želite unijeti posadu?"))
             {
                 var crewMembers = new List<Employee>();
-                crewMembers.AddRange(new List<Employee> { pilot, copilot, flightAttendantFirst, flightAttendantSecond } );
+                crewMembers.AddRange(new List<Employee> { pilot, copilot, flightAttendantFirst, flightAttendantSecond });
                 var crew = new Crew(crewMembers);
                 AllCrews.Add(crew);
                 foreach (var member in crewMembers)
@@ -1245,29 +1304,29 @@ namespace Internship_3_OOP
             }
         }
         static void AddEmployee()
-    {
-        Console.Clear();
-        Console.WriteLine("DODAVANJE NOVOG ZAPOSLENIKA\n");
-        string firstName = InputValidator.ReadString("Unesite ime zaposlenika: ");
-        string lastName = InputValidator.ReadString("Unesite prezime zaposlenika: ");
-        int yearOfBirth = InputValidator.ReadYear("Unesite godinu rođenja zaposlenika: ");
-        var position = InputValidator.ReadJobPosition("Unesite poziciju zaposlenika: ");
-        string gender = InputValidator.ReadGender("Unesite spol zaposlenika: ");
-        if (InputValidator.ConfirmAction("Jeste li sigurni da želite unijeti zaposlenika?"))
         {
-            var employee = new Employee(firstName, lastName, yearOfBirth, position, gender);
-            AllEmployees.Add(employee);
-            Console.WriteLine("Zaposlenik je uspješno dodan.");
-            Console.ReadKey();
-            return;
+            Console.Clear();
+            Console.WriteLine("DODAVANJE NOVOG ZAPOSLENIKA\n");
+            string firstName = InputValidator.ReadString("Unesite ime zaposlenika: ");
+            string lastName = InputValidator.ReadString("Unesite prezime zaposlenika: ");
+            int yearOfBirth = InputValidator.ReadYear("Unesite godinu rođenja zaposlenika: ");
+            var position = InputValidator.ReadJobPosition("Unesite poziciju zaposlenika: ");
+            string gender = InputValidator.ReadGender("Unesite spol zaposlenika: ");
+            if (InputValidator.ConfirmAction("Jeste li sigurni da želite unijeti zaposlenika?"))
+            {
+                var employee = new Employee(firstName, lastName, yearOfBirth, position, gender);
+                AllEmployees.Add(employee);
+                Console.WriteLine("Zaposlenik je uspješno dodan.");
+                Console.ReadKey();
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Dodavanje zaposlenika je otkazano.");
+                Console.ReadKey();
+                return;
+            }
         }
-        else
-        {
-            Console.WriteLine("Dodavanje zaposlenika je otkazano.");
-            Console.ReadKey();
-            return;
-        }
-    }
         static void AddPassengerFavouriteFlight(Passenger currentPassenger)
         {
             Console.Clear();
@@ -1296,7 +1355,7 @@ namespace Internship_3_OOP
                 return;
             }
             Console.WriteLine("Let pronađen");
-            if(!InputValidator.ConfirmAction("Jeste li sigurni da želite postaviti ovaj let za favorit?"))
+            if (!InputValidator.ConfirmAction("Jeste li sigurni da želite postaviti ovaj let za favorit?"))
             {
                 Console.WriteLine("Postavljanje favorita otkazano.");
                 Console.ReadKey();
@@ -1304,7 +1363,7 @@ namespace Internship_3_OOP
             }
 
             if (!currentPassenger.AddFavouriteFlight(foundFlight))
-                {
+            {
                 Console.WriteLine("Postavljanje favorita otkazano.");
                 Console.ReadKey();
                 return;
@@ -1341,14 +1400,14 @@ namespace Internship_3_OOP
 
         }
         static Flight FindFlightById(string prompt)
-            {
-                Console.WriteLine(prompt);
-                string shortId = Console.ReadLine().Trim() ?? string.Empty;
-                var foundFlightIndex = AllFlights.FindIndex(flight => flight.Id.ToString().StartsWith(shortId));
-                if (foundFlightIndex == -1)
-                    return null;
-                return AllFlights[foundFlightIndex];
-            }
+        {
+            Console.WriteLine(prompt);
+            string shortId = Console.ReadLine().Trim() ?? string.Empty;
+            var foundFlightIndex = AllFlights.FindIndex(flight => flight.Id.ToString().StartsWith(shortId));
+            if (foundFlightIndex == -1)
+                return null;
+            return AllFlights[foundFlightIndex];
+        }
         static Aircraft FindAircraftById(string prompt)
         {
             Console.WriteLine(prompt);
@@ -1358,7 +1417,7 @@ namespace Internship_3_OOP
                 return null;
             return AllAircrafts[foundAircraftIndex];
         }
-        static Employee SelectAvailableCrewMembers(string prompt,JobPosition position)
+        static Employee SelectAvailableCrewMembers(string prompt, JobPosition position)
         {
             Console.WriteLine(prompt);
             foreach (var employee in AllEmployees.Where(e => e.Position == position && e.Available == true))
@@ -1369,10 +1428,10 @@ namespace Internship_3_OOP
 
             string employeeNameInput = InputValidator.ReadString($"Unesite ime osobe koje želite zaposliti:");
             var pilot = AllEmployees.FirstOrDefault(employee => employee.FirstName == employeeNameInput);
-            
+
             return pilot;
         }
-        static void PrintSortedFlightInfo(string sortType, string sortBy, List<Flight> AllFlights)
+        static void PrintSortedFlightInfo(string sortType, string sortBy)
         {
             var sortedFlights = new List<Flight>();
 
@@ -1415,6 +1474,37 @@ namespace Internship_3_OOP
 
             foreach (var flight in sortedFlights)
                 flight.PrintInfo();
+        }
+        static void PrintSortedAircraftInfo(string sortType, string sortBy)
+        {
+            var sortedAircrafts = new List<Aircraft>();
+            switch (sortBy.ToLower())
+            {
+                case "dodan":
+                    sortedAircrafts = AllAircrafts.OrderBy(a => a.CreatedAt).ToList();
+                    break;
+
+                case "proizvodnja":
+                    if (sortType == "ASC")
+                    {
+                        sortedAircrafts = AllAircrafts.OrderBy(a => a.YearOfProduction).ToList();
+                        break;
+                    }
+                    sortedAircrafts = AllAircrafts.OrderByDescending(a => a.YearOfProduction).ToList();
+                    break;
+                case "letovi":
+                    if (sortType == "ASC")
+                    {
+                        sortedAircrafts = AllAircrafts.OrderBy(a => a.FlightsCount).ToList();
+                        break;
+                    }
+                    sortedAircrafts = AllAircrafts.OrderByDescending(a => a.FlightsCount).ToList();
+                    break;
+                default:
+                    return;
+            }
+            foreach (var aircraft in sortedAircrafts)
+                aircraft.PrintInfo();
         }
     }
 }

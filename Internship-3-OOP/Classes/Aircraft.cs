@@ -6,6 +6,7 @@
         public int YearOfProduction {  get; set; }
         public List<SeatCategories> AircraftSeatCategories { get; set; }
         public List<int> SeatCategoriesAvailability { get; set; }
+        public int FlightsCount { get; set; }
 
         public Aircraft(string name, int yearOfProduction, List<SeatCategories> aircraftSeatCategories, List<int> seatCategoriesAvailability)
         {
@@ -13,6 +14,7 @@
             YearOfProduction = yearOfProduction;
             AircraftSeatCategories = aircraftSeatCategories;
             SeatCategoriesAvailability = seatCategoriesAvailability;
+            FlightsCount = 0;
         }
         public void PrintInfo()
         {
