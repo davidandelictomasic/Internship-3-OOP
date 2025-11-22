@@ -8,6 +8,8 @@
 
         private List<Guid> ReservedFlightIds = new();
 
+        private List<Flight> FavouriteFlights = new();
+
         public IReadOnlyList<Guid> GetReservedFlightIds()
         {
             return ReservedFlightIds.AsReadOnly();
@@ -18,6 +20,7 @@
         {
             Email = email;
             Password = password;
+            FavouriteFlights = new List<Flight>();
         }
 
         public bool VerifyPassword(string password)
@@ -38,6 +41,28 @@
         {
             ReservedFlightIds.Remove(flightId);
             UpdateTimestamp();
+        }
+        public bool AddFavouriteFlight(Flight flight)
+        {
+                if (FavouriteFlights.Contains(flight))
+                    return false;
+
+                FavouriteFlights.Add(flight);
+                UpdateTimestamp();
+                return true;
+
+        }
+        public void PrintFavouriteFlightInfo()
+        {
+            if(FavouriteFlights.Count == 0)
+            {
+                Console.WriteLine("Ne postoji ni jedan favorit");                
+                return;
+            }
+            foreach(var flight in FavouriteFlights)
+            {
+                flight.PrintInfo();
+            }
         }
     }
 }

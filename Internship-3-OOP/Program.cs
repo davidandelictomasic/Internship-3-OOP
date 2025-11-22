@@ -174,7 +174,7 @@ namespace Internship_3_OOP
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("LETOVI PUTNIKA\n1 - Prikaz svih letova\n2 - Odabir leta\n3 - Pretraživanje letova\n4 - Otkazivanje leta\n5 - Povratak na prethodni izbornik");
+                Console.WriteLine("LETOVI PUTNIKA\n1 - Prikaz svih letova\n2 - Odabir leta\n3 - Pretraživanje letova\n4 - Otkazivanje leta\n5 - Dodaj favorit leta\n6 - Ispis svih favorita\n7 - Povratak na prethodni izbornik");
                 Console.Write("Odabir: ");
 
                 if (int.TryParse(Console.ReadLine(), out int userChoice))
@@ -194,6 +194,12 @@ namespace Internship_3_OOP
                             CancelPassengerFlight(currentPassenger);
                             break;
                         case 5:
+                            AddPassengerFavouriteFlight(currentPassenger);
+                            break;
+                        case 6:
+                            PrintAllPassengerFavouriteFlights(currentPassenger);
+                            break;
+                        case 7:
                             return;
                         default:
                             Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
@@ -1135,6 +1141,61 @@ namespace Internship_3_OOP
             return;
         }
     }
+        static void AddPassengerFavouriteFlight(Passenger currentPassenger)
+        {
+            Console.Clear();
+            Console.WriteLine("DODAVANJE FAVORITA");
+            if (currentPassenger.GetReservedFlightIds().Count == 0)
+            {
+                Console.WriteLine("Nemate rezerviranih letova.");
+                Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                Console.ReadKey();
+                return;
+            }
+            foreach (var flightId in currentPassenger.GetReservedFlightIds())
+            {
+                var flight = AllFlights.Find(flight => flight.Id == flightId);
+                if (flight != null)
+                {
+                    flight.PrintInfo();
+                }
+            }
+
+            var foundFlight = FindFlightById(currentPassenger);
+            if (foundFlight == null)
+            {
+                Console.WriteLine("Let nije pronađen.");
+                Console.ReadKey();
+                return;
+            }
+            Console.WriteLine("Let pronađen");
+            if(!InputValidator.ConfirmAction("Jeste li sigurni da želite postaviti ovaj let za favorit?"))
+            {
+                Console.WriteLine("Postavljanje favorita otkazano.");
+                Console.ReadKey();
+                return;
+            }
+
+            if (!currentPassenger.AddFavouriteFlight(foundFlight))
+                {
+                Console.WriteLine("Postavljanje favorita otkazano.");
+                Console.ReadKey();
+                return;
+            }
+            Console.WriteLine("Postavljanje favorita uspješno.");
+            Console.ReadKey();
+            return;
+        }
+        static void PrintAllPassengerFavouriteFlights(Passenger currentPassenger)
+        {
+            Console.Clear();
+            Console.WriteLine("ISPIS SVIH FAVORITA PUTNIKA");
+            currentPassenger.PrintFavouriteFlightInfo();
+
+            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+            Console.ReadKey();
+            return;
+        }
         static Flight FindFlightById(Passenger currentPassenger)
 
         {
