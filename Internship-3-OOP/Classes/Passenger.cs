@@ -64,5 +64,50 @@
                 flight.PrintInfo();
             }
         }
+        public void PrintSortedFlightInfo(string sortType, string sortBy, List<Flight> AllFlights)
+        {
+            var sortedFlights = GetReservedFlightIds().Select(id => AllFlights.Find(f => f.Id == id)).Where(f => f != null).ToList();
+
+            switch (sortBy.ToLower())
+            {
+                case "polazak":
+                    if (sortType == "ASC")
+                    {
+                        sortedFlights = sortedFlights.OrderBy(f => f.DepartureTime).ToList();
+                        break;
+                    }
+                    sortedFlights = sortedFlights.OrderByDescending(f => f.DepartureTime).ToList();
+                    break;
+
+                case "trajanje":
+                    if (sortType == "ASC")
+                    {
+                        sortedFlights = sortedFlights.OrderBy(f => f.FlightDuration).ToList();
+                        break;
+                    }
+                    sortedFlights = sortedFlights.OrderByDescending(f => f.FlightDuration).ToList();
+                    break;
+
+                case "udaljenost":
+                    if (sortType == "ASC")
+                    {
+                        sortedFlights = sortedFlights.OrderBy(f => f.Distance).ToList();
+                        break;
+                    }
+                    sortedFlights = sortedFlights.OrderByDescending(f => f.Distance).ToList();
+                    break;
+
+                case "naziv":
+                    sortedFlights = sortedFlights.OrderBy(f => f.FlightName).ToList();
+                    break;
+
+                default:
+                    return;
+            }
+
+            foreach (var flight in sortedFlights)
+                flight.PrintInfo();
+        }
+
     }
 }

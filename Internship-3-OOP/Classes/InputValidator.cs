@@ -355,7 +355,7 @@ namespace Internship_3_OOP.Classes
         {
             while (true)
             {
-                SeatCategories category = ReadSeatCategory("Odaberite kategoriju sjedala (standard, business, VIP): ");
+                SeatCategories category = ReadSeatCategory("Odaberite kategoriju sjedala (Standard, Business, VIP): ");
 
                 if (!flight.HasCategory(category))
                 {

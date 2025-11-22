@@ -376,26 +376,86 @@ namespace Internship_3_OOP
         }
         static void PrintPassengerFlights(Passenger currentPassenger)
         {
-            Console.Clear();
-            Console.WriteLine("PRIKAZ SVIH LETOVA PUTNIKA\n");
-            if (currentPassenger.GetReservedFlightIds().Count == 0)
+            while (true)
             {
-                Console.WriteLine("Nemate rezerviranih letova.");
-                Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
-                Console.ReadKey();
-                return;
-            }
-            foreach (var flightId in currentPassenger.GetReservedFlightIds())
-            {
-                var flight = AllFlights.Find(flight => flight.Id == flightId);
-                if (flight != null)
+                Console.Clear();
+                Console.WriteLine("PRIKAZ SVIH LETOVA PUTNIKA\n");
+                if (currentPassenger.GetReservedFlightIds().Count == 0)
                 {
-                    flight.PrintInfo();
+                    Console.WriteLine("Nemate rezerviranih letova.");
+                    Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                    Console.ReadKey();
+                    return;
                 }
+
+                Console.WriteLine("NAČIN ISPISIVANJA\n1 - Silazno po vremenu polaska\n2 - Uzlazno po vremenu polaska\n3 - Silazno po vremenu trajanja leta\n4 - Uzlazno po vremenu trajanja leta\n5 - Silazno po udaljenosti\n6 - Uzlazno po udaljenosti\n7 - Abecedno po nazivu\n8 - Normalan ispis");
+                Console.Write("Odabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int userChoice))
+                {
+                    switch (userChoice)
+                    {
+                        case 1:
+                            currentPassenger.PrintSortedFlightInfo("DESC","polazak",AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 2:
+                            currentPassenger.PrintSortedFlightInfo("ASC", "polazak", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 3:
+                            currentPassenger.PrintSortedFlightInfo("DESC", "trajanje", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 4:
+                            currentPassenger.PrintSortedFlightInfo("ASC", "trajanje", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 5:
+                            currentPassenger.PrintSortedFlightInfo("DESC", "udaljenost", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 6:
+                            currentPassenger.PrintSortedFlightInfo("ASC", "udaljenost", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 7:
+                            currentPassenger.PrintSortedFlightInfo("ASC", "naziv", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 8:
+                            foreach (var flightId in currentPassenger.GetReservedFlightIds())
+                            {
+                                var flight = AllFlights.Find(flight => flight.Id == flightId);
+                                if (flight != null)
+                                {
+                                    flight.PrintInfo();
+                                }
+                            }
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        default:
+                            Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                            Console.ReadKey();
+                            continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                    Console.ReadKey();
+                    continue;
+                }
+                
             }
-            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
-            Console.ReadKey();
-            return;
         }
         static void AddPassengerFlight(Passenger currentPassenger)
         {
@@ -587,16 +647,83 @@ namespace Internship_3_OOP
             return;
         }
         static void PrintAllFlights()
-        {
-            Console.Clear();
-            Console.WriteLine("PRIKAZ SVIH LETOVA\n");
+        {          
+            
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("PRIKAZ SVIH LETOVA\n");
+                if (AllFlights.Count == 0)
+                {
+                    Console.WriteLine("Ne postoji ni jedan let.");
+                    Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                    Console.ReadKey();
+                    return;
+                }
+               
 
-            foreach (var flight in AllFlights)
-                flight.PrintInfo();
+                Console.WriteLine("NAČIN ISPISIVANJA\n1 - Silazno po vremenu polaska\n2 - Uzlazno po vremenu polaska\n3 - Silazno po vremenu trajanja leta\n4 - Uzlazno po vremenu trajanja leta\n5 - Silazno po udaljenosti\n6 - Uzlazno po udaljenosti\n7 - Abecedno po nazivu\n8 - Normalan ispis");
+                Console.Write("Odabir: ");
 
-            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
-            Console.ReadKey();
-            return;
+                if (int.TryParse(Console.ReadLine(), out int userChoice))
+                {
+                    switch (userChoice)
+                    {
+                        case 1:
+                            PrintSortedFlightInfo("DESC", "polazak", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 2:
+                            PrintSortedFlightInfo("ASC", "polazak", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 3:
+                            PrintSortedFlightInfo("DESC", "trajanje", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 4:
+                            PrintSortedFlightInfo("ASC", "trajanje", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 5:
+                            PrintSortedFlightInfo("DESC", "udaljenost", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 6:
+                            PrintSortedFlightInfo("ASC", "udaljenost", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 7:
+                            PrintSortedFlightInfo("ASC", "naziv", AllFlights);
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        case 8:
+                            foreach (var flight in AllFlights)
+                                flight.PrintInfo();
+                            Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
+                            Console.ReadKey();
+                            return;
+                        default:
+                            Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                            Console.ReadKey();
+                            continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Pogrešan unos, pokušajte ponovo.");
+                    Console.ReadKey();
+                    continue;
+                }
+                
+            }
 
         }
         static void AddFlight()
@@ -1244,6 +1371,50 @@ namespace Internship_3_OOP
             var pilot = AllEmployees.FirstOrDefault(employee => employee.FirstName == employeeNameInput);
             
             return pilot;
+        }
+        static void PrintSortedFlightInfo(string sortType, string sortBy, List<Flight> AllFlights)
+        {
+            var sortedFlights = new List<Flight>();
+
+            switch (sortBy.ToLower())
+            {
+                case "polazak":
+                    if (sortType == "ASC")
+                    {
+                        sortedFlights = AllFlights.OrderBy(f => f.DepartureTime).ToList();
+                        break;
+                    }
+                    sortedFlights = AllFlights.OrderByDescending(f => f.DepartureTime).ToList();
+                    break;
+
+                case "trajanje":
+                    if (sortType == "ASC")
+                    {
+                        sortedFlights = AllFlights.OrderBy(f => f.FlightDuration).ToList();
+                        break;
+                    }
+                    sortedFlights = AllFlights.OrderByDescending(f => f.FlightDuration).ToList();
+                    break;
+
+                case "udaljenost":
+                    if (sortType == "ASC")
+                    {
+                        sortedFlights = AllFlights.OrderBy(f => f.Distance).ToList();
+                        break;
+                    }
+                    sortedFlights = AllFlights.OrderByDescending(f => f.Distance).ToList();
+                    break;
+
+                case "naziv":
+                    sortedFlights = AllFlights.OrderBy(f => f.FlightName).ToList();
+                    break;
+
+                default:
+                    return;
+            }
+
+            foreach (var flight in sortedFlights)
+                flight.PrintInfo();
         }
     }
 }
