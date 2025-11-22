@@ -27,18 +27,7 @@ namespace Internship_3_OOP
 
             AllPassengers.AddRange(new List<Passenger> { Passenger2, Passenger3 });
 
-            var Flight1 = new Flight("ZAG", "LHR", DateTime.Today.AddHours(500), DateTime.Today.AddHours(504), 180, 1500.0);
-
-            var Flight2 = new Flight("ZAG", "CDG", DateTime.Today.AddHours(520), DateTime.Today.AddHours(523), 160, 1080.0);
-
-            var Flight3 = new Flight("LHR", "JFK", DateTime.Today.AddHours(540), DateTime.Today.AddHours(548), 250, 5560.0);
-
-            var Flight4 = new Flight("FRA", "ZAG", DateTime.Today.AddHours(560), DateTime.Today.AddHours(562), 140, 610.0);
-
-            var Flight5 = new Flight("ZAG", "DXB", DateTime.Today.AddHours(580), DateTime.Today.AddHours(587), 200, 4200.0);
-
-
-            AllFlights.AddRange(new List<Flight> { Flight2, Flight3, Flight4, Flight5 });
+           
 
             var Aircraft1 = new Aircraft("Boeing 737", 2010,
                 new List<SeatCategories> { SeatCategories.Standard, SeatCategories.Business },
@@ -81,6 +70,19 @@ namespace Internship_3_OOP
             Emp6.SetAvailability(false);
 
             AllCrews.Add(Crew1 );
+
+            var Flight1 = new Flight("ZAG", "LHR", DateTime.Today.AddHours(500), DateTime.Today.AddHours(504), 180, 1500.0, Aircraft1,Crew1);
+
+            var Flight2 = new Flight("ZAG", "CDG", DateTime.Today.AddHours(520), DateTime.Today.AddHours(523), 160, 1080.0,Aircraft3,Crew1);
+
+            var Flight3 = new Flight("LHR", "JFK", DateTime.Today.AddHours(540), DateTime.Today.AddHours(548), 250, 5560.0,Aircraft1,Crew1);
+
+            var Flight4 = new Flight("FRA", "ZAG", DateTime.Today.AddHours(560), DateTime.Today.AddHours(562), 140, 610.0,Aircraft2,Crew1);
+
+            var Flight5 = new Flight("ZAG", "DXB", DateTime.Today.AddHours(580), DateTime.Today.AddHours(587), 200, 4200.0,Aircraft4,Crew1);
+
+
+            AllFlights.AddRange(new List<Flight> { Flight2, Flight3, Flight4, Flight5 });
 
             ShowStartingMenu();
 
@@ -382,7 +384,7 @@ namespace Internship_3_OOP
                 var flight = AllFlights.Find(flight => flight.Id == flightId);
                 if (flight != null)
                 {
-                    Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)} - Naziv:{flight.FlightName} - Polazak:{flight.DepartureTime} - Dolazak:{flight.ArrivalTime} - Udaljenost:{flight.Distance}km - Trajanje:{flight.FlightDuration}min");
+                    flight.PrintInfo();
                 }
             }
             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
@@ -394,7 +396,7 @@ namespace Internship_3_OOP
             Console.Clear();
             Console.WriteLine("PRIKAZ SVIH LETOVA PUTNIKA\nLetovi:");
             foreach (var flight in AllFlights)
-                Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)} - Naziv:{flight.FlightName} - Polazak:{flight.DepartureTime} - Dolazak:{flight.ArrivalTime} - Udaljenost:{flight.Distance}km - Trajanje:{flight.FlightDuration}min");
+                flight.PrintInfo();
 
             var foundFlight = FindFlightById("Unesite ID leta koji želite rezervirati (prvih 8 znakova):");
             if (foundFlight != null)
@@ -467,7 +469,7 @@ namespace Internship_3_OOP
                         var foundFlight = FindFlightById(currentPassenger);
                         if (foundFlight != null)
                         {
-                            Console.WriteLine($"ID:{foundFlight.Id.ToString().Substring(0, 8)} - Naziv:{foundFlight.FlightName} - Polazak:{foundFlight.DepartureTime} - Dolazak:{foundFlight.ArrivalTime} - Udaljenost:{foundFlight.Distance}km - Trajanje:{foundFlight.FlightDuration}min");
+                            foundFlight.PrintInfo();
                             Console.WriteLine("Let upješno ispisan.");
 
                         }
@@ -537,7 +539,7 @@ namespace Internship_3_OOP
                 var flight = AllFlights.Find(flight => flight.Id == flightId);
                 if (flight != null)
                 {
-                    Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)} - Naziv:{flight.FlightName} - Polazak:{flight.DepartureTime} - Dolazak:{flight.ArrivalTime} - Udaljenost:{flight.Distance}km - Trajanje:{flight.FlightDuration}min");
+                    flight.PrintInfo();
                 }
             }
             var foundFlight = FindFlightById(currentPassenger);
@@ -582,7 +584,7 @@ namespace Internship_3_OOP
             Console.WriteLine("PRIKAZ SVIH LETOVA\n");
 
             foreach (var flight in AllFlights)
-                Console.WriteLine($"ID:{flight.Id.ToString().Substring(0, 8)} - Naziv:{flight.FlightName} - Polazak:{flight.DepartureTime} - Dolazak:{flight.ArrivalTime} - Udaljenost:{flight.Distance}km - Trajanje:{flight.FlightDuration}min");
+                flight.PrintInfo();
 
             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
             Console.ReadKey();
@@ -599,7 +601,43 @@ namespace Internship_3_OOP
             DateTime arrivalTime = InputValidator.ReadArrivalTime(departureTime,"Unesite vrijeme dolaska (yyyy-MM-dd HH:mm): ");
             int capacity = InputValidator.ReadInt("Unesite kapacitet leta: ");
             double distance = InputValidator.ReadDouble("Unesite udaljenost leta (u km): ");
-            var flight = new Flight(origin, destination, departureTime, arrivalTime, capacity, distance);
+            Console.WriteLine("Svi avioni:");
+            foreach (var aircraft in AllAircrafts)
+                Console.WriteLine($"ID:{aircraft.Id.ToString().Substring(0, 8)}");
+
+
+            var foundAircraft = FindAircraftById("Unesite ID aviona koji želite dodati: ");
+            if (foundAircraft != null)
+            {
+                
+                Console.WriteLine("Avion uspješno dodan.");
+            }
+            else
+            {
+                Console.WriteLine("Avion nije pronađen.");
+                Console.ReadKey();
+                return;
+
+            }
+
+            Console.WriteLine("Sve posade:");
+            foreach (Crew crew in AllCrews)
+                Console.WriteLine($"ID:{crew.Id}");
+            Console.Write("Unesite ID posade koja će biti dodana letu (prvih 8 znakova): ");
+            string shortId = Console.ReadLine().Trim() ?? string.Empty;
+            var foundCrewIndex = AllCrews.FindIndex(crew => crew.Id.ToString().StartsWith(shortId));
+            if (foundCrewIndex == -1)
+            {
+                Console.WriteLine("Posada nije pronađena.");
+                Console.ReadKey();
+                return;
+
+            }
+            var foundCrew = AllCrews[foundCrewIndex];
+            Console.WriteLine("Posada uspješno dodana.");
+
+
+            var flight = new Flight(origin, destination, departureTime, arrivalTime, capacity, distance,foundAircraft, foundCrew);
 
             if (InputValidator.ConfirmAction("Jeste li sigurni da želite unijeti let?"))
             {
@@ -634,7 +672,7 @@ namespace Internship_3_OOP
                         var foundFlight = FindFlightById("Unesite ID leta koji želite pretražiti: ");
                         if (foundFlight != null) {
 
-                            Console.WriteLine($"ID:{foundFlight.Id.ToString().Substring(0, 8)} - Naziv:{foundFlight.FlightName} - Polazak:{foundFlight.DepartureTime} - Dolazak:{foundFlight.ArrivalTime} - Udaljenost:{foundFlight.Distance}km - Trajanje:{foundFlight.FlightDuration}min");
+                            foundFlight.PrintInfo();
                             Console.WriteLine("Let uspješno pronađen.");
                         }
                         else
@@ -652,7 +690,7 @@ namespace Internship_3_OOP
 
                         if (foundFlightName != null)
                         {
-                            Console.WriteLine($"ID:{foundFlightName.Id.ToString().Substring(0, 8)} - Naziv:{foundFlightName.FlightName} - Polazak:{foundFlightName.DepartureTime} - Dolazak:{foundFlightName.ArrivalTime} - Udaljenost:{foundFlightName.Distance}km - Trajanje:{foundFlightName.FlightDuration}min");
+                            foundFlightName.PrintInfo();
                             Console.WriteLine("Let upješno pronađen.");
                         }
                         else
@@ -692,7 +730,7 @@ namespace Internship_3_OOP
             if (foundFlight != null)
             {
 
-                Console.WriteLine($"ID:{foundFlight.Id.ToString().Substring(0, 8)} - Naziv:{foundFlight.FlightName} - Polazak:{foundFlight.DepartureTime} - Dolazak:{foundFlight.ArrivalTime} - Udaljenost:{foundFlight.Distance}km - Trajanje:{foundFlight.FlightDuration}min");
+                foundFlight.PrintInfo();
                 Console.WriteLine("Let uspješno pronađen.");
             }
             else
@@ -768,7 +806,7 @@ namespace Internship_3_OOP
             if (foundFlight != null)
             {
 
-                Console.WriteLine($"ID:{foundFlight.Id.ToString().Substring(0, 8)} - Naziv:{foundFlight.FlightName} - Polazak:{foundFlight.DepartureTime} - Dolazak:{foundFlight.ArrivalTime} - Udaljenost:{foundFlight.Distance}km - Trajanje:{foundFlight.FlightDuration}min");
+                foundFlight.PrintInfo();
                 Console.WriteLine("Let uspješno pronađen.");
             }
             else
@@ -799,10 +837,10 @@ namespace Internship_3_OOP
                 Console.ReadKey();
                 return;
             }
+
             foreach (var aircraft in AllAircrafts)
-            {
-                Console.WriteLine($"ID:{aircraft.Id.ToString().Substring(0, 8)} - Naziv:{aircraft.Name} - Godina proizvodnje:{aircraft.YearOfProduction} - Kategorije sjedala:{string.Join(", ", aircraft.AircraftSeatCategories)}");
-            }
+                aircraft.PrintInfo();
+
             Console.WriteLine("\nPritisnite bilo koju tipku za povratak na izbornik...");
             Console.ReadKey();
             return;
@@ -862,8 +900,7 @@ namespace Internship_3_OOP
                         var foundAircraft = FindAircraftById("Unesite ID aviona koji želite pretražiti: ");
                         if (foundAircraft != null)
                         {
-
-                            Console.WriteLine($"ID:{foundAircraft.Id.ToString().Substring(0, 8)} - Naziv:{foundAircraft.Name} - Godina proizvodnje:{foundAircraft.YearOfProduction} - Kategorije sjedala:{string.Join(", ", foundAircraft.AircraftSeatCategories)}");
+                            foundAircraft.PrintInfo();
                             Console.WriteLine("Avion uspješno pronađen.");
                         }
                         else
@@ -881,7 +918,7 @@ namespace Internship_3_OOP
 
                         if (foundAircraftName != null)
                         {
-                            Console.WriteLine($"ID:{foundAircraftName.Id.ToString().Substring(0, 8)} - Naziv:{foundAircraftName.Name} - Godina proizvodnje:{foundAircraftName.YearOfProduction} - Kategorije sjedala:{string.Join(", ", foundAircraftName.AircraftSeatCategories)}");
+                            foundAircraftName.PrintInfo(); 
                             Console.WriteLine("Avion upješno pronađen.");
                         }
                         else
@@ -930,8 +967,7 @@ namespace Internship_3_OOP
                         var foundAircraft = FindAircraftById("Unesite ID aviona koji želite izbrisati: ");
                         if (foundAircraft != null)
                         {
-
-                            Console.WriteLine($"ID:{foundAircraft.Id.ToString().Substring(0, 8)} - Naziv:{foundAircraft.Name} - Godina proizvodnje:{foundAircraft.YearOfProduction} - Kategorije sjedala:{string.Join(", ", foundAircraft.AircraftSeatCategories)}");
+                            foundAircraft.PrintInfo();
                             Console.WriteLine("Avion uspješno pronađen.");
                         }
                         else
@@ -962,7 +998,7 @@ namespace Internship_3_OOP
 
                         if (foundAircraftName != null)
                         {
-                            Console.WriteLine($"ID:{foundAircraftName.Id.ToString().Substring(0, 8)} - Naziv:{foundAircraftName.Name} - Godina proizvodnje:{foundAircraftName.YearOfProduction} - Kategorije sjedala:{string.Join(", ", foundAircraftName.AircraftSeatCategories)}");
+                            foundAircraftName.PrintInfo();
                             Console.WriteLine("Avion upješno pronađen.");
                         }
                         else

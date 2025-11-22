@@ -10,13 +10,15 @@
         public int Capacity { get; set; }
         public int FlightDuration { get; set; }
         public double Distance { get; set; }
+        public Aircraft FlightAircraft { get; set; }
+        public Crew FlightCrew { get; set; }
 
         private List<Guid> ReservedPassengerIds = new();
         public IReadOnlyList<Guid> GetReservedPassengerIds()
         {
             return ReservedPassengerIds.AsReadOnly();
         }
-        public Flight(string origin, string destination, DateTime departureTime, DateTime arrivalTime, int capacity, double distance)
+        public Flight(string origin, string destination, DateTime departureTime, DateTime arrivalTime, int capacity, double distance,Aircraft aircraft,Crew crew)
         {
             FlightName = $"{origin}-{destination}";
             Origin = origin;
@@ -26,6 +28,8 @@
             Capacity = capacity;
             FlightDuration = (int)(ArrivalTime - DepartureTime).TotalMinutes;            
             Distance = distance;
+            FlightAircraft = aircraft;
+            FlightCrew = crew;
 
         }
 
@@ -53,6 +57,11 @@
         public bool IsFull()
         {
             return ReservedPassengerIds.Count >= Capacity;
+        }
+        public void PrintInfo()
+        {
+            Console.WriteLine($"ID:{Id.ToString().Substring(0, 8)} - Naziv:{FlightName} - Polazak:{DepartureTime} - Dolazak:{ArrivalTime} - Udaljenost:{Distance}km - Trajanje:{FlightDuration}min");
+
         }
 
 

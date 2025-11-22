@@ -14,6 +14,11 @@
             AircraftSeatCategories = aircraftSeatCategories;
             SeatCategoriesAvailability = seatCategoriesAvailability;
         }
+        public void PrintInfo()
+        {
+            Console.WriteLine($"ID:{Id.ToString().Substring(0, 8)} - Naziv:{Name} - Godina proizvodnje:{YearOfProduction} - Kategorije sjedala:{string.Join(", ", AircraftSeatCategories)}");
+
+        }
 
     }
 }
